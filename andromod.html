@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AndroMod — Android O'yin Modlari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c14;
+      --bg2: #0f1220;
+      --bg3: #141828;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --accent3: #ff4081;
+      --text: #e2e8f0;
+      --muted: #7d8ba3;
+      --card: rgba(20,24,40,0.85);
+      --glow: 0 0 24px #00e5ff55;
+      --glow2: 0 0 24px #7c3aed55;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND GRID */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,12,20,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,229,255,0.12);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+    }
+    .logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-shadow: var(--glow);
+    }
+    .logo span { color: var(--accent2); }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 1px;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--accent); }
+    .nav-upload {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff !important;
+      padding: 8px 22px; border-radius: 6px;
+      font-weight: 700 !important;
+      transition: box-shadow .2s !important;
+    }
+    .nav-upload:hover { box-shadow: var(--glow) !important; color: #fff !important; }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 90px 5% 70px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(124,58,237,0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.25);
+      color: var(--accent);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 3px;
+      padding: 6px 18px; border-radius: 20px;
+      margin-bottom: 28px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.0); }
+      50% { box-shadow: 0 0 18px 4px rgba(0,229,255,0.18); }
+    }
+    .hero h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700; line-height: 1.08;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #fff 20%, var(--accent) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 22px;
+    }
+    .hero p {
+      color: var(--muted); font-size: 1.18rem; max-width: 560px;
+      margin: 0 auto 38px; line-height: 1.7;
+    }
+    .hero-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost {
+      padding: 14px 36px; border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.08rem; font-weight: 700; letter-spacing: 1.5px;
+      cursor: pointer; transition: all .22s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+      color: #fff; border: none;
+      box-shadow: 0 4px 32px rgba(0,229,255,0.2);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid rgba(0,229,255,0.35);
+    }
+    .btn-ghost:hover { background: rgba(0,229,255,0.07); border-color: var(--accent); }
+
+    /* STATS */
+    .stats {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; gap: 0;
+      flex-wrap: wrap;
+      background: var(--bg2);
+      border-top: 1px solid rgba(0,229,255,0.1);
+      border-bottom: 1px solid rgba(0,229,255,0.1);
+      padding: 28px 5%;
+    }
+    .stat {
+      flex: 1; min-width: 140px; max-width: 220px;
+      text-align: center; padding: 16px 24px;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--accent);
+      text-shadow: var(--glow);
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+
+    /* SECTION */
+    section { position: relative; z-index: 1; padding: 70px 5%; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.9rem; font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+    .section-title span { color: var(--accent); }
+    .see-all {
+      color: var(--accent); font-size: 0.9rem; text-decoration: none;
+      font-weight: 600; border-bottom: 1px solid transparent;
+      transition: border-color .2s;
+    }
+    .see-all:hover { border-color: var(--accent); }
+
+    /* CATEGORIES */
+    .categories {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 44px;
+    }
+    .cat-btn {
+      padding: 8px 20px; border-radius: 20px;
+      background: var(--bg3); border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted); font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all .18s; letter-spacing: .5px;
+    }
+    .cat-btn:hover, .cat-btn.active {
+      background: rgba(0,229,255,0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* GAME CARDS */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+    }
+    .game-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .22s, border-color .22s, box-shadow .22s;
+      cursor: pointer;
+    }
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: 0 8px 36px rgba(0,229,255,0.12);
+    }
+    .card-img {
+      width: 100%; height: 160px; object-fit: cover;
+      display: block;
+    }
+    .card-img-placeholder {
+      width: 100%; height: 160px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .card-body { padding: 18px; }
+    .card-tags { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 4px;
+    }
+    .tag-mod { background: rgba(0,229,255,0.12); color: var(--accent); }
+    .tag-free { background: rgba(124,58,237,0.15); color: #a78bfa; }
+    .tag-new { background: rgba(255,64,129,0.12); color: var(--accent3); }
+    .tag-hot { background: rgba(255,160,0,0.12); color: #ffd54f; }
+    .card-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.22rem; font-weight: 700; letter-spacing: .5px;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .card-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .card-stars { color: #ffd54f; font-size: 0.85rem; }
+    .card-dl { font-size: 0.8rem; color: var(--muted); }
+    .card-btn {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff; border: none;
+      padding: 8px 18px; border-radius: 6px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 0.92rem; letter-spacing: 1px;
+      cursor: pointer; transition: box-shadow .2s;
+    }
+    .card-btn:hover { box-shadow: var(--glow); }
+
+    /* UPLOAD SECTION */
+    .upload-section {
+      background: var(--bg2);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 20px;
+      padding: 52px 5%;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .upload-section::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .upload-section h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2.2rem; font-weight: 700; letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+    .upload-section p { color: var(--muted); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+    .upload-form { display: flex; flex-direction: column; gap: 16px; max-width: 520px; margin: 0 auto; }
+    .upload-form input, .upload-form select, .upload-form textarea {
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 0.95rem;
+      outline: none; transition: border-color .2s;
+      width: 100%;
+    }
+    .upload-form input:focus, .upload-form select:focus, .upload-form textarea:focus {
+      border-color: rgba(0,229,255,0.4);
+    }
+    .upload-form textarea { min-height: 90px; resize: vertical; }
+    .upload-form select option { background: var(--bg3); }
+    .upload-drop {
+      border: 2px dashed rgba(0,229,255,0.25);
+      border-radius: 10px; padding: 32px;
+      color: var(--muted); font-size: 0.95rem;
+      cursor: pointer; transition: all .2s;
+    }
+    .upload-drop:hover { border-color: var(--accent); background: rgba(0,229,255,0.04); }
+    .upload-drop .drop-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .upload-submit {
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+      color: #fff; border: none;
+      padding: 15px; border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem; font-weight: 700; letter-spacing: 2px;
+      cursor: pointer; transition: box-shadow .22s;
+    }
+    .upload-submit:hover { box-shadow: var(--glow); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(5,7,15,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 20px; padding: 40px;
+      max-width: 480px; width: 92%;
+      position: relative; text-align: center;
+    }
+    .modal h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.8rem; margin-bottom: 12px; color: var(--accent);
+    }
+    .modal p { color: var(--muted); margin-bottom: 24px; line-height: 1.65; }
+    .modal-close {
+      position: absolute; top: 18px; right: 22px;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.4rem; cursor: pointer; transition: color .2s;
+    }
+    .modal-close:hover { color: var(--accent3); }
+    .modal-progress { margin: 18px 0; }
+    .prog-bar { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+    .prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      width: 0%; border-radius: 3px;
+      transition: width .3s ease;
+    }
+    .prog-label { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 50px 5% 28px;
+      position: relative; z-index: 1;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px; margin-bottom: 36px;
+    }
+    .footer-brand .logo { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+    .footer-brand p { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+    .footer-col h4 {
+      font-family: 'Rajdhani', sans-serif; font-size: 1rem;
+      font-weight: 700; letter-spacing: 1.5px; color: var(--text);
+      margin-bottom: 14px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color .2s; }
+    .footer-col ul a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 22px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+      gap: 12px;
+    }
+    .footer-bottom p { color: var(--muted); font-size: 0.82rem; }
+
+    /* SEARCH BAR */
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 10px 18px;
+      max-width: 480px; width: 100%; margin: 0 auto 48px;
+      transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: rgba(0,229,255,0.4); }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 0.95rem;
+      flex: 1;
+    }
+    .search-bar .search-icon { color: var(--muted); font-size: 1.1rem; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 32px; right: 32px; z-index: 999;
+      background: var(--bg2); border: 1px solid rgba(0,229,255,0.3);
+      border-radius: 10px; padding: 14px 22px;
+      color: var(--text); font-size: 0.92rem;
+      box-shadow: var(--glow);
+      transform: translateY(80px); opacity: 0;
+      transition: all .3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(0,229,255,0.5); }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .stat { min-width: 120px; }
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 420px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Andro<span>Mod</span></div>
+  <ul>
+    <li><a href="#mods">Modlar</a></li>
+    <li><a href="#upload">Yuklash</a></li>
+    <li><a href="#about">Haqida</a></li>
+    <li><a href="#upload" class="nav-upload">+ MOD QO'SH</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🎮 ANDROID O'YIN MODLARI</div>
+  <h1>AndroMod<br>Platformasi</h1>
+  <p>Android o'yinlari uchun eng zo'r modlarni toping, yuklab oling yoki o'zingizning modingizni hamjamiyat bilan baham ko'ring.</p>
+  <div class="hero-btns">
+    <a href="#mods" class="btn-primary">Modlarni Ko'rish</a>
+    <a href="#upload" class="btn-ghost">Mod Yuklash</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">2,400+</div>
+    <div class="stat-label">MOD FAYLLARI</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">180+</div>
+    <div class="stat-label">O'YINLAR</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">56K+</div>
+    <div class="stat-label">FOYDALANUVCHI</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">99.8%</div>
+    <div class="stat-label">XAVFSIZLIK</div>
+  </div>
+</div>
+
+<!-- MODS SECTION -->
+<section id="mods">
+  <div class="section-header">
+    <div class="section-title">🔥 <span>Mashhur</span> Modlar</div>
+    <a href="#" class="see-all">Hammasini ko'rish →</a>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="O'yin yoki mod nomini qidiring..." id="searchInput" oninput="filterCards()" />
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <button class="cat-btn active" onclick="setCategory(this, 'all')">Hammasi</button>
+    <button class="cat-btn" onclick="setCategory(this, 'action')">🗡️ Action</button>
+    <button class="cat-btn" onclick="setCategory(this, 'rpg')">⚔️ RPG</button>
+    <button class="cat-btn" onclick="setCategory(this, 'racing')">🏎️ Racing</button>
+    <button class="cat-btn" onclick="setCategory(this, 'strategy')">🧠 Strategy</button>
+    <button class="cat-btn" onclick="setCategory(this, 'sport')">⚽ Sport</button>
+    <button class="cat-btn" onclick="setCategory(this, 'shooter')">🎯 Shooter</button>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-grid" id="cardsGrid">
+
+    <div class="game-card" data-cat="action" data-name="PUBG Mobile Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">🔫</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-hot">🔥 HOT</span>
+        </div>
+        <div class="card-title">PUBG Mobile</div>
+        <div class="card-desc">Cheksiz UC, aimbot, wallhack va boshqa kuchli modlar bilan.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★★</div>
+            <div class="card-dl">↓ 12,400</div>
+          </div>
+          <button class="card-btn" onclick="openModal('PUBG Mobile Mod', 'pubg_mod_v2.1.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card" data-cat="rpg" data-name="Genshin Impact Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#1a1030,#2a1040);">✨</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-new">✨ YANGI</span>
+        </div>
+        <div class="card-title">Genshin Impact</div>
+        <div class="card-desc">Cheksiz primogem, barcha karakterlar ochilgan maxsus versiya.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★☆</div>
+            <div class="card-dl">↓ 8,900</div>
+          </div>
+          <button class="card-btn" onclick="openModal('Genshin Impact Mod', 'genshin_mod_v4.3.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card" data-cat="racing" data-name="Asphalt 9 Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#0a2010,#1a4020);">🏎️</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-free">FREE</span>
+        </div>
+        <div class="card-title">Asphalt 9</div>
+        <div class="card-desc">Cheksiz pul va barcha mashinalar, VIP kirish bepul.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★★</div>
+            <div class="card-dl">↓ 7,200</div>
+          </div>
+          <button class="card-btn" onclick="openModal('Asphalt 9 Mod', 'asphalt9_mod_v4.0.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card" data-cat="strategy" data-name="Clash of Clans Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#201000,#402000);">🏰</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-hot">🔥 HOT</span>
+        </div>
+        <div class="card-title">Clash of Clans</div>
+        <div class="card-desc">Cheksiz oltin, elixir va qora elixir bilan private server.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★☆</div>
+            <div class="card-dl">↓ 10,100</div>
+          </div>
+          <button class="card-btn" onclick="openModal('Clash of Clans Mod', 'coc_mod_private.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card" data-cat="shooter" data-name="Free Fire Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#200020,#400040);">💥</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-new">✨ YANGI</span>
+        </div>
+        <div class="card-title">Free Fire MAX</div>
+        <div class="card-desc">Auto aim, speed hack va cheksiz diamond bilan maxsus versiya.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★★</div>
+            <div class="card-dl">↓ 15,600</div>
+          </div>
+          <button class="card-btn" onclick="openModal('Free Fire MAX Mod', 'freefire_mod_v6.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card" data-cat="sport" data-name="FIFA Mobile Mod">
+      <div class="card-img-placeholder" style="background:linear-gradient(135deg,#001020,#002040);">⚽</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-mod">MOD APK</span>
+          <span class="tag tag-free">FREE</span>
+        </div>
+        <div class="card-title">FIFA Mobile</div>
+        <div class="card-desc">Barcha futbolchilar, cheksiz FIFA coin va VP bilan.</div>
+        <div class="card-footer">
+          <div>
+            <div class="card-stars">★★★★☆</div>
+            <div class="card-dl">↓ 6,700</div>
+          </div>
+          <button class="card-btn" onclick="openModal('FIFA Mobile Mod', 'fifa_mod_v24.apk')">YUKLAB OL</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- UPLOAD SECTION -->
+<section id="upload">
+  <div class="upload-section">
+    <h2>📤 Mod <span style="color:var(--accent)">Yuklash</span></h2>
+    <p>O'zingizning mod faylingizni hamjamiyat bilan baham ko'ring. Tekshirishdan o'tgandan so'ng saytda joylashtiriladi.</p>
+    <div class="upload-form">
+      <input type="text" id="modName" placeholder="O'yin nomi (masalan: PUBG Mobile)" />
+      <input type="text" id="modVersion" placeholder="Mod versiyasi (masalan: v2.8.0)" />
+      <select id="modCat">
+        <option value="" disabled selected>Kategoriya tanlang</option>
+        <option>Action</option>
+        <option>RPG</option>
+        <option>Racing</option>
+        <option>Strategy</option>
+        <option>Sport</option>
+        <option>Shooter</option>
+        <option>Boshqa</option>
+      </select>
+      <textarea id="modDesc" placeholder="Mod haqida qisqacha ma'lumot..."></textarea>
+      <div class="upload-drop" onclick="document.getElementById('fileInput').click()">
+        <div class="drop-icon">📁</div>
+        <div id="dropLabel">APK faylni bu yerga tashlang yoki bosing</div>
+        <input type="file" id="fileInput" accept=".apk" style="display:none" onchange="fileSelected(this)" />
+      </div>
+      <button class="upload-submit" onclick="submitMod()">MOD YUKLASH →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="text-align:center; padding-top:50px;">
+  <div style="max-width:620px; margin:0 auto;">
+    <div class="hero-badge">BULAR HAQIDA</div>
+    <h2 style="font-family:'Rajdhani',sans-serif;font-size:2rem;font-weight:700;letter-spacing:1.5px;margin-bottom:16px;">AndroMod <span style="color:var(--accent)">Nima?</span></h2>
+    <p style="color:var(--muted);line-height:1.8;font-size:1rem;">
+      AndroMod — bu Android o'yin modlarini topish va ulashish uchun yaratilgan maxsus platforma. 
+      Foydalanuvchilar o'z modlarini yuklashlari, hamjamiyat bilan baham ko'rishlari va eng yangi 
+      modlarni yuklab olishlari mumkin. Barcha fayllar xavfsizlik tekshiruvi dan o'tkaziladi.
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">Andro<span>Mod</span></span>
+      <p>Android o'yin modlari uchun eng yirik o'zbek platformasi.</p>
+    </div>
+    <div class="footer-col">
+      <h4>NAVIGATSIYA</h4>
+      <ul>
+        <li><a href="#mods">Modlar</a></li>
+        <li><a href="#upload">Yuklash</a></li>
+        <li><a href="#about">Haqida</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>KATEGORIYALAR</h4>
+      <ul>
+        <li><a href="#">Action</a></li>
+        <li><a href="#">RPG</a></li>
+        <li><a href="#">Racing</a></li>
+        <li><a href="#">Strategy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>ALOQA</h4>
+      <ul>
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Email</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 AndroMod. Barcha huquqlar himoyalangan.</p>
+    <p style="color:var(--muted);font-size:0.8rem;">Faqat shaxsiy foydalanish uchun</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="font-size:2.5rem;margin-bottom:12px;">⬇️</div>
+    <h2 id="modalTitle">Mod nomi</h2>
+    <p id="modalDesc">Yuklab olish boshlanmoqda...</p>
+    <div class="modal-progress">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-label" id="progLabel">0%</div>
+    </div>
+    <button class="card-btn" id="modalBtn" style="width:100%;padding:14px;font-size:1rem;" onclick="closeModal()">BEKOR QILISH</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // FILTER
+  let currentCat = 'all';
+  function setCategory(btn, cat) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat = cat;
+    filterCards();
+  }
+  function filterCards() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.game-card').forEach(card => {
+      const name = card.dataset.name.toLowerCase();
+      const cat = card.dataset.cat;
+      const matchCat = currentCat === 'all' || cat === currentCat;
+      const matchQ = !q || name.includes(q);
+      card.style.display = (matchCat && matchQ) ? 'block' : 'none';
+    });
+  }
+
+  // MODAL / DOWNLOAD
+  let progInterval;
+  function openModal(name, file) {
+    document.getElementById('modalTitle').textContent = name;
+    document.getElementById('modalDesc').textContent = file + ' yuklanmoqda...';
+    document.getElementById('progFill').style.width = '0%';
+    document.getElementById('progLabel').textContent = '0%';
+    document.getElementById('modalBtn').textContent = 'BEKOR QILISH';
+    document.getElementById('modalOverlay').classList.add('open');
+    let pct = 0;
+    clearInterval(progInterval);
+    progInterval = setInterval(() => {
+      pct += Math.random() * 8 + 3;
+      if (pct >= 100) { pct = 100; clearInterval(progInterval);
+        document.getElementById('progLabel').textContent = '✅ Tayyor!';
+        document.getElementById('modalBtn').textContent = 'YOPISH';
+      } else {
+        document.getElementById('progLabel').textContent = Math.floor(pct) + '%';
+      }
+      document.getElementById('progFill').style.width = pct + '%';
+    }, 180);
+  }
+  function closeModal() {
+    clearInterval(progInterval);
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  // UPLOAD
+  function fileSelected(input) {
+    if (input.files[0]) {
+      document.getElementById('dropLabel').textContent = '✅ ' + input.files[0].name + ' tanlandi';
+    }
+  }
+  function submitMod() {
+    const name = document.getElementById('modName').value.trim();
+    const cat = document.getElementById('modCat').value;
+    if (!name || !cat) {
+      showToast('❗ Iltimos barcha maydonlarni to\'ldiring');
+      return;
+    }
+    showToast('✅ Mod muvaffaqiyatli yuborildi! Tekshirishdan so\'ng joylashtiriladi.');
+    document.getElementById('modName').value='';
+    document.getElementById('modVersion').value='';
+    document.getElementById('modDesc').value='';
+    document.getElementById('modCat').selectedIndex=0;
+    document.getElementById('dropLabel').textContent='APK faylni bu yerga tashlang yoki bosing';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3400);
+  }
+</script>
+</body>
+</html>
